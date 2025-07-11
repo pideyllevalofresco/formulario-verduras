@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pídelo y te lo llevamos fresco a tu casa</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            overflow: hidden;
+            animation: slideIn 0.8s ease-out;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .header {
+            background: linear-gradient(135deg, #2ecc71, #27ae60);
+            color: white;
+            padding: 30px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+            animation: float 6s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+        }
+
+        .header h1 {
+            font-size: 28px;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            position: relative;
+            z-index: 1;
+        }
+
+        .header p {
+            font-size: 16px;
+            opacity: 0.9;
+            position: relative;
+            z-index: 1;
+        }
+
+        .vegetable-image {
+            width: 100%;
+            height: 250px;
+            object-fit: cover;
+            border-bottom: 5px solid #2ecc71;
+        }
+
+        .form-container {
+            padding: 40px;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: #2c3e50;
+            font-size: 16px;
+        }
+
+        input[type="text"], input[type="tel"] {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #ecf0f1;
+            border-radius: 10px;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            background: #f8f9fa;
+        }
+
+        input[type="text"]:focus, input[type="tel"]:focus {
+            outline: none;
+            border-color: #2ecc71;
+            background: white;
+            box-shadow: 0 0 10px rgba(46, 204, 113, 0.2);
+        }
+
+        .productos-section {
+            background: #f8f9fa;
+            padding: 25px;
+            border-radius: 15px;
+            margin: 20px 0;
+            border: 1px solid #e9ecef;
+        }
+
+        .productos-section h3 {
+            color: #2c3e50;
+            margin-bottom: 20px;
+            font-size: 20px;
+            text-align: center;
+            position: relative;
+        }
+
+        .productos-section h3::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 50px;
+            height: 3px;
+            background: linear-gradient(to right, #2ecc71, #27ae60);
+            border-radius: 2px;
+        }
+
+        .productos-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .producto-item {
+            background: white;
+            padding: 15px;
+            border-radius: 10px;
+            border: 2px solid #ecf0f1;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .producto-item:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            border-color: #2ecc71;
+        }
+
+        .producto-item.selected {
+            border-color: #2ecc71;
+            background: #f0fff4;
+        }
+
+        .producto-item input[type="checkbox"] {
+            margin-right: 10px;
+            transform: scale(1.2);
+            accent-color: #2ecc71;
+        }
+
+        .producto-item label {
+            margin: 0;
+            cursor: pointer;
+            font-size: 16px;
+            display: flex;
+            align-items: center;
+        }
+
+        .otro-producto {
+            margin-top: 15px;
+        }
+
+        .otro-producto input[type="text"] {
+            margin-top: 10px;
+            display: none;
+        }
+
+        .otro-producto input[type="text"].show {
+            display: block;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .submit-btn {
+            width: 100%;
+            padding: 18px;
+            background: linear-gradient(135deg, #2ecc71, #27ae60);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 30px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(46, 204, 113, 0.3);
+        }
+
+        .submit-btn:active {
+            transform: translateY(0);
+        }
+
+        .resumen {
+            background: #e8f5e8;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            border-left: 4px solid #2ecc71;
+            display: none;
+        }
+
+        .resumen.show {
+            display: block;
+            animation: slideDown 0.5s ease;
+        }
+
+        @keyframes slideDown {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .whatsapp-btn {
+            background: #25d366;
+            color: white;
+            padding: 15px 30px;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            margin-top: 15px;
+            transition: all 0.3s ease;
+        }
+
+        .whatsapp-btn:hover {
+            background: #128c7e;
+            transform: translateY(-2px);
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                margin: 10px;
+                border-radius: 15px;
+            }
+            
+            .form-container {
+                padding: 20px;
+            }
+            
+            .productos-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🥕 Pídelo y te lo llevamos fresco a tu casa 🥬</h1>
+            <p>Verduras frescas directo a tu hogar</p>
+        </div>
+        
+        <img src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAwIiBoZWlnaHQ9IjI1MCIgdmlld0JveD0iMCAwIDYwMCAyNTAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSI2MDAiIGhlaWdodD0iMjUwIiBmaWxsPSIjZjBmOGZmIi8+CjxjaXJjbGUgY3g9IjEwMCIgY3k9IjEwMCIgcj0iMzAiIGZpbGw9IiNmZjYzNDciLz4KPGNpcmNsZSBjeD0iMTgwIiBjeT0iMTIwIiByPSIyNSIgZmlsbD0iI2ZmNjM0NyIvPgo8Y2lyY2xlIGN4PSIxNDAiIGN5PSI4MCIgcj0iMjAiIGZpbGw9IiNmZjYzNDciLz4KPHJlY3QgeD0iMjIwIiB5PSI2MCIgd2lkdGg9IjE1IiBoZWlnaHQ9IjgwIiByeD0iNyIgZmlsbD0iIzRjYWY1MCIvPgo8cmVjdCB4PSIyNDAiIHk9IjcwIiB3aWR0aD0iMTUiIGhlaWdodD0iNzAiIHJ4PSI3IiBmaWxsPSIjNGNhZjUwIi8+CjxjaXJjbGUgY3g9IjMwMCIgY3k9IjEwMCIgcj0iMzUiIGZpbGw9IiNmZjUxNTEiLz4KPGNpcmNsZSBjeD0iMzUwIiBjeT0iMTEwIiByPSIzMCIgZmlsbD0iI2ZmNTE1MSIvPgo8ZWxsaXBzZSBjeD0iNDIwIiBjeT0iMTAwIiByeD0iMjAiIHJ5PSIzNSIgZmlsbD0iI2ZmOWMwMCIvPgo8ZWxsaXBzZSBjeD0iNDUwIiBjeT0iMTEwIiByeD0iMTgiIHJ5PSIzMCIgZmlsbD0iI2ZmOWMwMCIvPgo8ZWxsaXBzZSBjeD0iNDgwIiBjeT0iOTAiIHJ4PSIxNSIgcnk9IjI1IiBmaWxsPSIjZmY5YzAwIi8+CjxlbGxpcHNlIGN4PSI1MjAiIGN5PSIxMDAiIHJ4PSIyNSIgcnk9IjE1IiBmaWxsPSIjOGJjMzRhIi8+CjxlbGxpcHNlIGN4PSI1NTAiIGN5PSI4MCIgcng9IjIwIiByeT0iMTIiIGZpbGw9IiM4YmMzNGEiLz4KPHBhdGggZD0iTTUwIDIwMEwxMDAgMTgwTDE1MCAyMDBMMjAwIDE4MEwyNTAgMjAwTDMwMCAxODBMMzUwIDIwMEw0MDAgMTgwTDQ1MCAyMDBMNTAwIDE4MEw1NTAgMjAwIiBzdHJva2U9IiM0Y2FmNTAiIHN0cm9rZS13aWR0aD0iMyIgZmlsbD0ibm9uZSIvPgo8dGV4dCB4PSIzMDAiIHk9IjIzMCIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZmlsbD0iIzJjM2U1MCIgZm9udC1mYW1pbHk9IkFyaWFsIiBmb250LXNpemU9IjE4IiBmb250LXdlaWdodD0iYm9sZCI+VmVyZHVyYXMgRnJlc2NhcyBkZSBDYWxpZGFkPC90ZXh0Pgo8L3N2Zz4K" alt="Verduras Frescas" class="vegetable-image">
+        
+        <div class="form-container">
+            <form id="pedidoForm">
+                <div class="form-group">
+                    <label for="nombre">👤 Nombre Completo *</label>
+                    <input type="text" id="nombre" name="nombre" required placeholder="Ingresa tu nombre completo">
+                </div>
+
+                <div class="form-group">
+                    <label for="telefono">📱 Teléfono *</label>
+                    <input type="tel" id="telefono" name="telefono" required placeholder="Ejemplo: +57 300 123 4567">
+                </div>
+
+                <div class="productos-section">
+                    <h3>🥬 Selecciona tus productos frescos</h3>
+                    <div class="productos-grid">
+                        <div class="producto-item">
+                            <label>
+                                <input type="checkbox" name="productos" value="Tomate" onchange="updateProductStyle(this)">
+                                🍅 Tomate
+                            </label>
+                        </div>
+                        <div class="producto-item">
+                            <label>
+                                <input type="checkbox" name="productos" value="Papa" onchange="updateProductStyle(this)">
+                                🥔 Papa
+                            </label>
+                        </div>
+                        <div class="producto-item">
+                            <label>
+                                <input type="checkbox" name="productos" value="Cebolla" onchange="updateProductStyle(this)">
+                                🧅 Cebolla
+                            </label>
+                        </div>
+                        <div class="producto-item">
+                            <label>
+                                <input type="checkbox" name="productos" value="Zanahoria" onchange="updateProductStyle(this)">
+                                🥕 Zanahoria
+                            </label>
+                        </div>
+                        <div class="producto-item">
+                            <label>
+                                <input type="checkbox" name="productos" value="Ají" onchange="updateProductStyle(this)">
+                                🌶️ Ají
+                            </label>
+                        </div>
+                        <div class="producto-item">
+                            <label>
+                                <input type="checkbox" name="productos" value="Cebollín" onchange="updateProductStyle(this)">
+                                🌱 Cebollín
+                            </label>
+                        </div>
+                        <div class="producto-item">
+                            <label>
+                                <input type="checkbox" name="productos" value="Cilantro" onchange="updateProductStyle(this)">
+                                🌿 Cilantro
+                            </label>
+                        </div>
+                        <div class="producto-item">
+                            <label>
+                                <input type="checkbox" name="productos" value="Lechuga" onchange="updateProductStyle(this)">
+                                🥬 Lechuga
+                            </label>
+                        </div>
+                        <div class="producto-item">
+                            <label>
+                                <input type="checkbox" name="productos" value="Yuca" onchange="updateProductStyle(this)">
+                                🥥 Yuca
+                            </label>
+                        </div>
+                        <div class="producto-item otro-producto">
+                            <label>
+                                <input type="checkbox" name="productos" value="Otro" onchange="toggleOtro(this)">
+                                ➕ Otro
+                            </label>
+                            <input type="text" id="otroProducto" name="otroProducto" placeholder="Especifica qué otro producto necesitas">
+                        </div>
+                    </div>
+                </div>
+
+                <button type="submit" class="submit-btn">
+                    🛒 Realizar Pedido
+                </button>
+            </form>
+
+            <div id="resumen" class="resumen">
+                <h3>📋 Resumen de tu pedido</h3>
+                <div id="resumenContent"></div>
+                <button id="whatsappBtn" class="whatsapp-btn">
+                    📱 Enviar por WhatsApp
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function updateProductStyle(checkbox) {
+            const productItem = checkbox.closest('.producto-item');
+            
+            if (checkbox.checked) {
+                productItem.classList.add('selected');
+            } else {
+                productItem.classList.remove('selected');
+            }
+        }
+
+        function toggleOtro(checkbox) {
+            const otroInput = document.getElementById('otroProducto');
+            const productItem = checkbox.closest('.producto-item');
+            
+            if (checkbox.checked) {
+                otroInput.classList.add('show');
+                otroInput.focus();
+                productItem.classList.add('selected');
+            } else {
+                otroInput.classList.remove('show');
+                otroInput.value = '';
+                productItem.classList.remove('selected');
+            }
+        }
+
+        document.getElementById('pedidoForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const nombre = document.getElementById('nombre').value;
+            const telefono = document.getElementById('telefono').value;
+            const productosCheckboxes = document.querySelectorAll('input[name="productos"]:checked');
+            const otroProducto = document.getElementById('otroProducto').value;
+            
+            if (!nombre || !telefono) {
+                alert('Por favor, completa todos los campos obligatorios.');
+                return;
+            }
+            
+            if (productosCheckboxes.length === 0) {
+                alert('Por favor, selecciona al menos un producto.');
+                return;
+            }
+            
+            let productos = [];
+            productosCheckboxes.forEach(checkbox => {
+                if (checkbox.value === 'Otro' && otroProducto) {
+                    productos.push(otroProducto);
+                } else if (checkbox.value !== 'Otro') {
+                    productos.push(checkbox.value);
+                }
+            });
+            
+            // Mostrar resumen
+            const resumen = document.getElementById('resumen');
+            const resumenContent = document.getElementById('resumenContent');
+            
+            resumenContent.innerHTML = `
+                <p><strong>Nombre:</strong> ${nombre}</p>
+                <p><strong>Teléfono:</strong> ${telefono}</p>
+                <p><strong>Productos:</strong> ${productos.join(', ')}</p>
+            `;
+            
+            resumen.classList.add('show');
+            
+            // Preparar mensaje para WhatsApp
+            const mensaje = `¡Hola! 🌱 Quiero hacer un pedido de verduras frescas:
+
+👤 *Nombre:* ${nombre}
+📱 *Teléfono:* ${telefono}
+🥬 *Productos:* ${productos.join(', ')}
+
+¡Gracias por el servicio de entrega a domicilio! 🚚✨`;
+            
+            document.getElementById('whatsappBtn').onclick = function() {
+                const whatsappUrl = `https://wa.me/?text=${encodeURIComponent(mensaje)}`;
+                window.open(whatsappUrl, '_blank');
+            };
+            
+            // Scroll al resumen
+            resumen.scrollIntoView({ behavior: 'smooth' });
+        });
+
+        // Validación del teléfono
+        document.getElementById('telefono').addEventListener('input', function(e) {
+            let value = e.target.value.replace(/\D/g, '');
+            if (value.length > 0) {
+                if (value.length <= 3) {
+                    value = value;
+                } else if (value.length <= 6) {
+                    value = value.substring(0, 3) + ' ' + value.substring(3);
+                } else {
+                    value = value.substring(0, 3) + ' ' + value.substring(3, 6) + ' ' + value.substring(6, 10);
+                }
+            }
+            e.target.value = value;
+        });
+    </script>
+</body>
+</html>
